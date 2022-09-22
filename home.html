@@ -35,8 +35,38 @@
        thisScript.parentElement.replaceChild(iframe, thisScript); 
       
       </script> 
-    
 
+<script>
+  (function (cb) {
+      var db,
+      on = cb.bind(null, 'true'),
+      off = cb.bind(null, 'false')
+  
+      function tryls() {
+          try {
+              localStorage.length ? off() : (localStorage.x = 1, localStorage.removeItem("x"), off());
+          } catch (e) {
+              // Safari only enables cookie in private mode
+              // if cookie is disabled then all client side storage is disabled
+              // if all client side storage is disabled, then there is no point
+              // in using private mode
+              navigator.cookieEnabled ? on() : off();
+          }
+      }
+  
+      // Blink (chrome & opera)
+      window.webkitRequestFileSystem ? webkitRequestFileSystem(0, 0, off, on)
+      // FF
+      : "MozAppearance" in document.documentElement.style ? navigator.serviceWorker ? off() : on()
+      // Safari
+      : /constructor/i.test(window.HTMLElement) || window.safari ? tryls()
+      // IE10+ & edge
+      : !window.indexedDB && (window.PointerEvent || window.MSPointerEvent) ? on()
+      // Rest
+      : off()
+  })(function (isPrivateMode) { window.dataLayer.push({event: 'detected_incognito', is_incognito: isPrivateMode}); });
+  </script>
+    
     <style type="text/css">
       .embeddedServiceHelpButton .helpButton .uiButton {
         font-family: "Arial", sans-serif;
