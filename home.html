@@ -8,6 +8,14 @@
   </head>
   <body>
 
+    <script>
+      var pardotURI =
+      document.querySelector('#pardot').getAttribute('data-src');
+      document.querySelector('#pardot').setAttribute('src', pardotURI +
+      "?" + window.location.search.slice(1));
+    </script>
+  
+
     <script type="text/javascript"> 
 
       var form = 'https://go.unbosque.edu.co/l/946263/2022-09-15/37gpjr'; 
